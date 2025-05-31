@@ -4,7 +4,6 @@ from src.utils.env import EnvVariable
 
 router = APIRouter(prefix="/health", tags=["health"])
 
-
 @router.get("/")
 def health():
     env = EnvVariable()

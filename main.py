@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import APIRouter, FastAPI
 
+from src.controllers.bell import router as bell_router
 from src.controllers.health import router as health_router
 
 
@@ -10,6 +11,7 @@ def main():
     api = APIRouter(prefix="/v1")
 
     api.include_router(health_router)
+    api.include_router(bell_router)
 
     app.include_router(api)
 
