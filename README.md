@@ -40,7 +40,7 @@ This FastAPI application receives, processes, and broadcasts in real time the vi
 
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/<your-username>/iot-doorbell-api.git
+   git clone https://github.com/ZK1569/quasimodo.git
    cd iot-doorbell-api
    ```
 2. **Create and activate a virtual env**
@@ -63,8 +63,8 @@ python3 main.py
 ## WebSocket Endpoints 
 
 The API exposes two WebSocket endpoints to receive streams from the doorbell:
-1. ** Video Stream**
+1. **Video Stream**
   - url : `ws://0.0.0.0:8080/v1/bell/ws/video`
 
-2. ** Audio Stream**
+2. **Audio Stream**
   - url : `ws://0.0.0.0:8080/v1/bell/ws/audio`
