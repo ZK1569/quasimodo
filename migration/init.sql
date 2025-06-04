@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS face (
     id SERIAL PRIMARY KEY,
-    lastname VARCHAR(100) UNIQUE NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
     firstname VARCHAR(100) NOT NULL,
     face_embeddings BYTEA NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
