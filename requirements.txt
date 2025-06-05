@@ -1,5 +1,9 @@
 fastapi==0.115.12
+insightface==0.7.3
 numpy==2.2.6
+onnxruntime==1.22.0
 opencv_python==4.11.0.86
+psycopg2-binary==2.9.10
 python-dotenv==1.1.0
 uvicorn==0.34.2
+websockets==15.0.1
