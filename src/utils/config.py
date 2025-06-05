@@ -1,29 +1,47 @@
-from contextlib import contextmanager
 import psycopg2
+from contextlib import contextmanager
 
 from src.utils.env import EnvVariable
 
-@contextmanager
-def db_cursor():
-    conn = psycopg2.connect(
-        dbname=EnvVariable().db_name,
-        user=EnvVariable().db_user,
-        password=EnvVariable().db_password,
-        host=EnvVariable().db_host,
-        port=EnvVariable().db_port
-    )
-    cursor = conn.cursor()
-    # Connection test
-    try:
-        cursor.execute("SELECT 1")
-        print("Database connection successful!")
-    except Exception as e:
-        print("Database connection failed :", e)
+class PostgresDatabase:
+    def __init__(self):
+        self.conn = self.create_connection()
 
-    # If the connection succeeds, yield the cursor
-    try:
-        yield cursor
-        conn.commit()
-    finally:
-        cursor.close()
-        conn.close()
+    def create_connection(self):
+        try:
+            return psycopg2.connect(
+                dbname=EnvVariable().db_name,
+                user=EnvVariable().db_user,
+                password=EnvVariable().db_password,
+                host=EnvVariable().db_host,
+                port=EnvVariable().db_port
+            )
+        except Exception as e:
+            print("Erreur de connexion à la base de données :", e)
+            raise
+
+    def close(self):
+        if self.cursor:
+            self.cursor.close()
+        if self.conn:
+            self.conn.close()
+
+    def test_connection(self):
+        with self.cursor_context() as cursor:
+            cursor.execute("SELECT 1;")
+
+
+    @contextmanager
+    def cursor_context(self):
+        cursor = self.conn.cursor()
+        try:
+            yield cursor
+            self.conn.commit()
+        except Exception as e:
+            self.conn.rollback()
+            raise e
+        finally:
+            cursor.close()
+        
+
+postgresql_database = PostgresDatabase()
