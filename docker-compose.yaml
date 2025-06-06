@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  db_postgres:
+    image: postgres:12.20-alpine
+    container_name: short_url_postgres_database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migration/init.sql:/docker-entrypoint-initdb.d/db.sql
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+
+volumes:
+  postgres_data:
+    driver: local

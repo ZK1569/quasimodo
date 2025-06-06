@@ -19,6 +19,11 @@ class EnvVariable(metaclass=EnvVariableMeta):
 
         self.environnement = self._get_env("ENV", "development")
         self.version = self._get_env("VERSION", "0.0.0")
+        self.db_name = self._get_env("DB_NAME", "postgres")
+        self.db_user = self._get_env("DB_USER", "postgres")
+        self.db_password = self._get_env("DB_PASSWORD", "postgres") 
+        self.db_host = self._get_env("DB_HOST", "localhost")
+        self.db_port = self._get_env("DB_PORT", "5432")
 
         self.discord_bot_token = self._get_env("DISCORD_BOT_TOKEN")
         self.discord_channel = self._get_env("DISCORD_CHANNEL")
