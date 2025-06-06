@@ -49,4 +49,4 @@ def main(process_or_store, path):
 
 if __name__ == "__main__":
     #main("process", "./asset/04984.png")
-    main("process", "./asset/webcam2.jpg")
+    main("store", "./asset/webcam.jpg")
