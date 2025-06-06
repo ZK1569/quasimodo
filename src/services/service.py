@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+from src.models.face import Face
+
 
 class VisionServiceAbs(ABC):
 
     @abstractmethod
-    def process_image(self, frame: Any) -> None:
+    def process_image(self, frame: Any) -> Face | None:
         pass
 
 
