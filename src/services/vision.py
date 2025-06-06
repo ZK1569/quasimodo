@@ -59,5 +59,3 @@ def get_vision_service(
     face_repository: FaceRepositoryAbs = Depends(get_face_repository)
 ) -> Generator[VisionServiceAbs, None, None]:
     yield VisionService(face_repository)
-
-

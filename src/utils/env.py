@@ -25,6 +25,9 @@ class EnvVariable(metaclass=EnvVariableMeta):
         self.db_host = self._get_env("DB_HOST", "localhost")
         self.db_port = self._get_env("DB_PORT", "5432")
 
+        self.discord_bot_token = self._get_env("DISCORD_BOT_TOKEN")
+        self.discord_channel = self._get_env("DISCORD_CHANNEL")
+
     @staticmethod
     def _get_env(env_path: str, default: str = "") -> str:
         val = os.getenv(env_path)
