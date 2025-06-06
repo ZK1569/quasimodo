@@ -83,4 +83,6 @@ async def audio_stream_ws(
     except Exception as e:
         print("❌ Audio error:", e)
     finally:
+        transcription = audio_service.transcribe()
         await manager.disconnect(websocket)
+        print("🔊 Audio transcription:", transcription)
