@@ -20,6 +20,9 @@ class EnvVariable(metaclass=EnvVariableMeta):
         self.environnement = self._get_env("ENV", "development")
         self.version = self._get_env("VERSION", "0.0.0")
 
+        self.discord_bot_token = self._get_env("DISCORD_BOT_TOKEN")
+        self.discord_channel = self._get_env("DISCORD_CHANNEL")
+
     @staticmethod
     def _get_env(env_path: str, default: str = "") -> str:
         val = os.getenv(env_path)

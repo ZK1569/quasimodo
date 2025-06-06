@@ -6,8 +6,10 @@ from fastapi import APIRouter, Depends, WebSocket
 from starlette.websockets import WebSocketState
 
 from src.services.audio import get_audio_service
-from src.services.service import AudioServiceAbs, VisionServiceAbs
+from src.services.service import AudioServiceAbs, VisionServiceAbs, NotificationServiceAbs
 from src.services.vision import get_vision_service
+
+from src.services.notification import get_notification_service
 
 router = APIRouter(prefix="/bell", tags=["bell"])
 
@@ -42,10 +44,14 @@ manager = ConnectionManager()
 async def websocket_endpoint(
         websocket: WebSocket,
         vision_service: VisionServiceAbs = Depends(get_vision_service),
+        notification_service: NotificationServiceAbs = Depends(
+            get_notification_service)
 ):
 
     await manager.connect(websocket)
     print("🎥 Video WebSocket connected")
+
+    notification_service.send_message("Il y a un flux video qui est arrivé")
 
     try:
         while True:

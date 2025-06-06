@@ -11,6 +11,5 @@ class VisionService(VisionServiceAbs):
         return
 
 
-
 def get_vision_service() -> Generator[VisionServiceAbs, None, None]:
     yield VisionService()
