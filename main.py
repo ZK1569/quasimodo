@@ -1,9 +1,12 @@
 import uvicorn
 from fastapi import APIRouter, FastAPI
 import sys
+
 from src.controllers.bell import router as bell_router
 from src.controllers.health import router as health_router
+from src.controllers.admin import router as admin_router
 from src.utils.config import postgresql_database
+
 from contextlib import asynccontextmanager
 
 
@@ -20,11 +23,11 @@ def main():
 
     app = FastAPI(lifespan=lifespan)
 
-
     api = APIRouter(prefix="/v1")
 
     api.include_router(health_router)
     api.include_router(bell_router)
+    api.include_router(admin_router)
 
     app.include_router(api)
 
