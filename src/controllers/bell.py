@@ -27,7 +27,7 @@ class ConnectionManager:
             try:
                 await websocket.close()
             except RuntimeError:
-                pass  # déjà fermé
+                pass
 
         if websocket in self.active_connection:
             self.active_connection.remove(websocket)
@@ -51,24 +51,32 @@ async def websocket_endpoint(
     await manager.connect(websocket)
     print("🎥 Video WebSocket connected")
 
-    notification_service.send_message("Il y a un flux video qui est arrivé")
-
     try:
         while True:
             data = await websocket.receive_text()
             img_data = base64.b64decode(data)
             np_arr = np.frombuffer(img_data, dtype=np.uint8)
             frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-            if frame is not None:
-                cv2.imwrite("last_frame.jpg", frame)
 
-                vision_service.process_image(frame)
+            if frame is None:
+                continue
+
+            face = vision_service.process_image(frame)
+            if face is None:
+                continue
+
+            notification_service.send_message(
+                f"{face.firstname} {face.name} is at the door MOVE",
+                frame
+            )
+
+            # TODO: Send back data to rasp
+            break
 
     except Exception as e:
         print("❌ Video error:", e)
     finally:
         await manager.disconnect(websocket)
-        cv2.destroyAllWindows()
 
 
 @router.websocket("/ws/audio")
