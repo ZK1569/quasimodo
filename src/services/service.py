@@ -20,5 +20,5 @@ class AudioServiceAbs(ABC):
 
 class NotificationServiceAbs(ABC):
     @abstractmethod
-    def send_message(self, message: str) -> None:
+    def send_message(self, message: str, image: Any | None = None) -> None:
         pass

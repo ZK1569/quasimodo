@@ -19,9 +19,12 @@ class EnvVariable(metaclass=EnvVariableMeta):
 
         self.environnement = self._get_env("ENV", "development")
         self.version = self._get_env("VERSION", "0.0.0")
+        self.address = self._get_env("ADDR", "localhost")
+        self.port = self._get_env("PORT", "8080")
+
         self.db_name = self._get_env("DB_NAME", "postgres")
         self.db_user = self._get_env("DB_USER", "postgres")
-        self.db_password = self._get_env("DB_PASSWORD", "postgres") 
+        self.db_password = self._get_env("DB_PASSWORD", "postgres")
         self.db_host = self._get_env("DB_HOST", "localhost")
         self.db_port = self._get_env("DB_PORT", "5432")
 
