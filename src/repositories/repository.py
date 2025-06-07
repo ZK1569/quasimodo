@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
+
 class FaceRepositoryAbs(ABC):
 
     @abstractmethod
@@ -12,3 +13,8 @@ class FaceRepositoryAbs(ABC):
         pass
 
 
+class NotificationRepositoryAbs(ABC):
+
+    @abstractmethod
+    def send_message(self, message: str, image: Any | None = None) -> None:
+        pass

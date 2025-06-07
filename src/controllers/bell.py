@@ -6,8 +6,10 @@ from fastapi import APIRouter, Depends, WebSocket
 from starlette.websockets import WebSocketState
 
 from src.services.audio import get_audio_service
-from src.services.service import AudioServiceAbs, VisionServiceAbs
+from src.services.service import AudioServiceAbs, VisionServiceAbs, NotificationServiceAbs
 from src.services.vision import get_vision_service
+
+from src.services.notification import get_notification_service
 
 router = APIRouter(prefix="/bell", tags=["bell"])
 
@@ -25,7 +27,7 @@ class ConnectionManager:
             try:
                 await websocket.close()
             except RuntimeError:
-                pass  # déjà fermé
+                pass
 
         if websocket in self.active_connection:
             self.active_connection.remove(websocket)
@@ -42,6 +44,8 @@ manager = ConnectionManager()
 async def websocket_endpoint(
         websocket: WebSocket,
         vision_service: VisionServiceAbs = Depends(get_vision_service),
+        notification_service: NotificationServiceAbs = Depends(
+            get_notification_service)
 ):
 
     await manager.connect(websocket)
@@ -53,16 +57,26 @@ async def websocket_endpoint(
             img_data = base64.b64decode(data)
             np_arr = np.frombuffer(img_data, dtype=np.uint8)
             frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-            if frame is not None:
-                cv2.imwrite("last_frame.jpg", frame)
 
-                vision_service.process_image(frame)
+            if frame is None:
+                continue
+
+            face = vision_service.process_image(frame)
+            if face is None:
+                continue
+
+            notification_service.send_message(
+                f"{face.firstname} {face.name} is at the door MOVE",
+                frame
+            )
+
+            # TODO: Send back data to rasp
+            break
 
     except Exception as e:
         print("❌ Video error:", e)
     finally:
         await manager.disconnect(websocket)
-        cv2.destroyAllWindows()
 
 
 @router.websocket("/ws/audio")
