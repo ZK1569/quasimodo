@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 from src.models.face import Face
+from src.models.history import History
 
 
 class VisionServiceAbs(ABC):
@@ -21,4 +22,15 @@ class AudioServiceAbs(ABC):
 class NotificationServiceAbs(ABC):
     @abstractmethod
     def send_message(self, message: str, image: Any | None = None) -> None:
+        pass
+
+
+class HistoryServiceAbs(ABC):
+
+    @abstractmethod
+    def get_all_history(self) -> list[History]:
+        pass
+
+    @abstractmethod
+    def add(self, face: Face) -> bool:
         pass
