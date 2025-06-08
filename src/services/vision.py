@@ -11,7 +11,7 @@ class VisionService(VisionServiceAbs):
     def __init__(self, face_repository: FaceRepositoryAbs):
         # Load face detector and MobileFaceNet model
         self.face_repository = face_repository
-        self.detector = insightface.app.FaceAnalysis(name='buffalo_l', providers=['CPUExecutionProvider'])
+        self.detector = insightface.app.FaceAnalysis(name='buffalo_s', providers=['CPUExecutionProvider'])
         self.detector.prepare(ctx_id=0, det_size=(640, 640))
 
     def get_image_embedding(self, frame: Any) -> list:
