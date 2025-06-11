@@ -22,7 +22,6 @@ class VisionService(VisionServiceAbs):
         self.detector.prepare(ctx_id=0, det_size=(640, 640))
 
     def process_image(self, frame: Any) -> Face | None:
-        # print("Processing image with shape:", frame.shape)
         embeddings = self.get_image_embedding(frame)
         if not embeddings:
             return
@@ -32,10 +31,8 @@ class VisionService(VisionServiceAbs):
     def get_image_embedding(self, frame: Any) -> list:
         faces = self.detector.get(frame)
         if len(faces) == 0:
-            # print("No faces detected in the image.")
             return None
         embeddings = [list(face.embedding) for face in faces]
-        # print(f"Extracted {len(embeddings)} embeddings.")
         return embeddings
 
     def cosine_similarity(self, vec1, vec2):
@@ -57,7 +54,7 @@ class VisionService(VisionServiceAbs):
                 face = Face(lastname, firstname, face_id, similarity)
                 return face
 
-        return None
+        return Face("unknow", "unknow")
 
 
 def get_vision_service(
