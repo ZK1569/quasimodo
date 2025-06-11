@@ -31,12 +31,10 @@ class AudioService(AudioServiceAbs):
 
         segments, _ = self.model.transcribe(audio_np, language=self.language)
         full_text = " ".join([segment.text for segment in segments])
-        print("[Transcription]:", full_text)
 
         return full_text.strip()
 
     def reset_buffer(self) -> None:
-        # Reset buffer after transcription
         self.buffer.clear()
 
 

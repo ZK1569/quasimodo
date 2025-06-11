@@ -8,7 +8,6 @@ from starlette.websockets import WebSocketState
 from src.services.audio import get_audio_service
 from src.services.service import AudioServiceAbs, VisionServiceAbs, NotificationServiceAbs
 from src.services.vision import get_vision_service
-
 from src.services.notification import get_notification_service
 
 router = APIRouter(prefix="/bell", tags=["bell"])
@@ -37,7 +36,8 @@ class ConnectionManager:
             await connection.send_text(message)
 
 
-manager = ConnectionManager()
+video_manager = ConnectionManager()
+audio_manager = ConnectionManager()
 
 
 @router.websocket("/ws/video")
@@ -48,7 +48,7 @@ async def websocket_endpoint(
             get_notification_service)
 ):
 
-    await manager.connect(websocket)
+    await video_manager.connect(websocket)
     print("🎥 Video WebSocket connected")
 
     try:
@@ -76,7 +76,8 @@ async def websocket_endpoint(
     except Exception as e:
         print("❌ Video error:", e)
     finally:
-        await manager.disconnect(websocket)
+        await video_manager.disconnect(websocket)
+        print("❌🎥 fin Video")
 
 
 @router.websocket("/ws/audio")
@@ -84,7 +85,7 @@ async def audio_stream_ws(
         websocket: WebSocket,
         audio_service: AudioServiceAbs = Depends(get_audio_service),
 ):
-    await manager.connect(websocket)
+    await audio_manager.connect(websocket)
     print("🔊 Audio WebSocket connected")
 
     try:
@@ -97,6 +98,7 @@ async def audio_stream_ws(
     except Exception as e:
         print("❌ Audio error:", e)
     finally:
+        await audio_manager.disconnect(websocket)
         transcription = audio_service.transcribe()
-        await manager.disconnect(websocket)
         print("🔊 Audio transcription:", transcription)
+        print("❌🔊 fin Audio")
