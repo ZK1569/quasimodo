@@ -63,6 +63,10 @@ async def websocket_endpoint(
 
             face = vision_service.process_image(frame)
             if face is None:
+                print("👤 No face detected")
+                continue
+            elif face == -1:
+                print("❌ No matching face found in the database")
                 continue
 
             notification_service.send_message(

@@ -56,13 +56,15 @@ async def detect_face(
         raise HTTPException(status_code=400, detail="Image non valide")
 
     try:
-        face: Face | None = vision_service.process_image(img)
+        face = vision_service.process_image(img)
     except Exception as exc:
         raise HTTPException(
             status_code=500, detail="Erreur de traitement") from exc
 
-    if face is None:
+    if face is None :
         return {"status": "error", "detail": "Aucun visage reconnu"}
+    elif face == -1:
+        return {"status": "error", "detail": "Aucun visage correspondant trouvé dans la base de données"}
 
     return {
         "status": "ok",

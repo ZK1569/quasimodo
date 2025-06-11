@@ -56,8 +56,8 @@ class VisionService(VisionServiceAbs):
             if similarity > threshold:
                 face = Face(lastname, firstname, face_id, similarity)
                 return face
-
-        return None
+            
+        return -1
 
 
 def get_vision_service(
