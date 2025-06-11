@@ -1,11 +1,13 @@
+import os
+from pprint import pprint
 import cv2
 import numpy as np
-import os
 
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 
 from src.services.vision import get_vision_service
-from src.services.service import VisionServiceAbs
+from src.services.service import VisionServiceAbs, HistoryServiceAbs
+from src.services.history import get_history_service
 from src.models.face import Face
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -73,6 +75,19 @@ async def detect_face(
             "similarity": float(face.similarity),
         },
     }
+
+
+@router.get("/test")
+async def test_things(
+    history_service: HistoryServiceAbs = Depends(get_history_service)
+):
+
+    face = Face("crisitan", "ursu")
+    if history_service.add(face):
+        print("history added")
+        pprint(f"recu {history_service.get_all_history()}")
+
+    return {"status": "ok"}
 
 
 def loading_images(path):

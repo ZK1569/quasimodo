@@ -30,4 +30,3 @@ class FaceRepository(FaceRepositoryAbs):
 
 def get_face_repository() -> Generator[FaceRepositoryAbs, None, None]:
     yield FaceRepository()
-

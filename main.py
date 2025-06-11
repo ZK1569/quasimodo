@@ -7,8 +7,9 @@ from src.controllers.bell import router as bell_router
 from src.controllers.health import router as health_router
 from src.controllers.admin import router as admin_router
 from src.utils.config import postgresql_database
-from src.repositories.notification import get_notification_repository
 from src.utils.env import EnvVariable
+from src.repositories.history import get_history_repository
+from src.repositories.notification import NotificationRepository
 
 
 def main():
@@ -19,8 +20,8 @@ def main():
             postgresql_database.test_connection()
             print("✅ Database connection established successfully.")
 
-            notif_repo = get_notification_repository()
-            _ = next(notif_repo)
+            history_repo = next(get_history_repository())
+            NotificationRepository(history_repo)
 
         except Exception as e:
             sys.exit(f"❌ Error: {e}")
