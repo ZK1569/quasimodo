@@ -10,7 +10,7 @@ create table histories (
 	id SERIAL PRIMARY KEY,
 	fullname VARCHAR(255),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 INSERT INTO histories (fullname, created_at)
 SELECT
