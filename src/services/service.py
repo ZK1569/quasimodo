@@ -34,3 +34,9 @@ class HistoryServiceAbs(ABC):
     @abstractmethod
     def add(self, face: Face) -> bool:
         pass
+
+class LlmServiceAbs(ABC):
+
+    @abstractmethod
+    def get_llm_response(self, input_text: str) -> str :
+        pass
