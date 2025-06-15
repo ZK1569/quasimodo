@@ -6,9 +6,10 @@ from fastapi import APIRouter, Depends, WebSocket
 from starlette.websockets import WebSocketState
 
 from src.services.audio import get_audio_service
-from src.services.service import AudioServiceAbs, VisionServiceAbs, NotificationServiceAbs
+from src.services.service import AudioServiceAbs, VisionServiceAbs, NotificationServiceAbs, LlmServiceAbs
 from src.services.vision import get_vision_service
 from src.services.notification import get_notification_service
+from src.services.llm import get_llm_service
 
 router = APIRouter(prefix="/bell", tags=["bell"])
 
@@ -84,6 +85,7 @@ async def websocket_endpoint(
 async def audio_stream_ws(
         websocket: WebSocket,
         audio_service: AudioServiceAbs = Depends(get_audio_service),
+        llm_service: LlmServiceAbs = Depends(get_llm_service),
 ):
     await audio_manager.connect(websocket)
     print("🔊 Audio WebSocket connected")
@@ -100,5 +102,9 @@ async def audio_stream_ws(
     finally:
         await audio_manager.disconnect(websocket)
         transcription = audio_service.transcribe()
-        print("🔊 Audio transcription:", transcription)
+        if transcription:
+            cleaned_transcription = llm_service.get_llm_response(transcription)
+        else:
+            cleaned_transcription = "No transcription available"
+        print("🔊 Audio transcription:", cleaned_transcription)
         print("❌🔊 fin Audio")

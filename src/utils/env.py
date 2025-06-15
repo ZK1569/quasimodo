@@ -2,7 +2,6 @@ import os
 
 from dotenv import load_dotenv
 
-
 class EnvVariableMeta(type):
 
     _instances: dict[type, object] = {}
@@ -30,6 +29,8 @@ class EnvVariable(metaclass=EnvVariableMeta):
 
         self.discord_bot_token = self._get_env("DISCORD_BOT_TOKEN")
         self.discord_channel = self._get_env("DISCORD_CHANNEL")
+
+        self.chat_gpt_api_key = self._get_env("CHAT_GPT_API_KEY")
 
     @staticmethod
     def _get_env(env_path: str, default: str = "") -> str:
