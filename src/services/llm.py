@@ -20,6 +20,8 @@ class LlmService(LlmServiceAbs):
                     "role": "system",
                     "content": (
                         "Tu es un assistant de correction pour des transcriptions automatiques d'audio en texte. "
+                        "L'audio provient d'une caméra embarquée sur une sonnette d'entrée d'une maison. Le texte reçu provient donc d'un humain qui laisse un message après être venu,"
+                        " et le propriétaire de la maison est absent"
                         "Ton rôle est de corriger les erreurs fréquentes de transcription vocale en français, comme les confusions phonétiques, les mots proches ou mal reconnus. "
                         "Ta mission est de reformuler le texte pour qu'il corresponde à ce que l'utilisateur a probablement voulu dire à l'oral, "
                         "en gardant un ton naturel et en respectant la syntaxe du français courant. "
