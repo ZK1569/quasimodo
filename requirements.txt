@@ -11,3 +11,4 @@ soundfile
 uvicorn==0.34.2
 discord.py
 websockets==15.0.1
+python-multipart
