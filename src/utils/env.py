@@ -31,6 +31,7 @@ class EnvVariable(metaclass=EnvVariableMeta):
         self.discord_channel = self._get_env("DISCORD_CHANNEL")
 
         self.chat_gpt_api_key = self._get_env("CHAT_GPT_API_KEY")
+        self.eleven_labs_api_key = self._get_env("ELEVEN_LABS_API_KEY")
 
     @staticmethod
     def _get_env(env_path: str, default: str = "") -> str:
