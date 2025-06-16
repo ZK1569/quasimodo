@@ -56,7 +56,6 @@ async def websocket_endpoint(
     print("🎥 Video WebSocket connected")
 
     try:
-        print("👤 Waiting for video data...")
         while True:
             data = await websocket.receive_text()
             img_data = base64.b64decode(data)
@@ -81,7 +80,7 @@ async def websocket_endpoint(
             print(f"🎤 Message to be sent: {message}")
             # Ou bien
             # message = f"Bonjour {name} {firstname}! Michel a été notifié de votre présence."
-            audio_stream = speech_service.text_to_speech(message, type="save")
+            audio_stream = speech_service.text_to_speech(message)
             print(f"🎤 Audio stream generated : {audio_stream}")
 
             # TODO: Send back data to rasp
