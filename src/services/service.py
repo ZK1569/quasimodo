@@ -40,3 +40,9 @@ class LlmServiceAbs(ABC):
     @abstractmethod
     def get_llm_response(self, input_text: str) -> str :
         pass
+
+class SpeechServiceAbs(ABC):
+
+    @abstractmethod
+    def text_to_speech(self, input_text: str, type: str = None, output_filename: str = None) -> str :
+        pass
