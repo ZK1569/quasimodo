@@ -82,8 +82,8 @@ async def websocket_endpoint(
             print(f"🎤 Message to be sent: {message}")
 
             try:
-                audio_stream = speech_service.text_to_speech(message)
-                # audio_stream = None
+                # audio_stream = speech_service.text_to_speech(message)
+                audio_stream = None
                 print(f"🎤 Audio stream generated")
 
                 if audio_stream:
@@ -123,6 +123,8 @@ async def websocket_endpoint(
 async def audio_stream_ws(
         websocket: WebSocket,
         audio_service: AudioServiceAbs = Depends(get_audio_service),
+        notification_service: NotificationServiceAbs = Depends(
+            get_notification_service),
         llm_service: LlmServiceAbs = Depends(get_llm_service),
 ):
     await audio_manager.connect(websocket)
@@ -142,6 +144,12 @@ async def audio_stream_ws(
         transcription = audio_service.transcribe()
         if transcription:
             cleaned_transcription = llm_service.get_llm_response(transcription)
+
+            notification_message = llm_service.get_doorbell_notification(
+                cleaned_transcription)
+
+            notification_service.send_message(notification_message)
+
         else:
             cleaned_transcription = "No transcription available"
         print("🔊 Audio transcription:", cleaned_transcription)
