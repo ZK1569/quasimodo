@@ -2,6 +2,7 @@ import base64
 
 import cv2
 import numpy as np
+import json
 from fastapi import APIRouter, Depends, WebSocket
 from starlette.websockets import WebSocketState
 
@@ -80,39 +81,32 @@ async def websocket_endpoint(
             message = f"Bonjour {name} {firstname}! Michel n'est pas là pour le moment, veuillez laisser un message ou revenir plus tard."
             print(f"🎤 Message to be sent: {message}")
 
-            # Generate audio stream with error handling
             try:
                 audio_stream = speech_service.text_to_speech(message)
+                # audio_stream = None
                 print(f"🎤 Audio stream generated")
 
-                # Convert audio stream to bytes and encode in base64
                 if audio_stream:
-                    audio_stream.seek(0)  # Reset position to beginning
+                    audio_stream.seek(0)
                     audio_bytes = audio_stream.read()
                     audio_base64 = base64.b64encode(
                         audio_bytes).decode('utf-8')
 
-                    # Send audio back to Raspberry Pi with a type indicator
                     response_data = {
                         "type": "audio_response",
                         "audio": audio_base64
                     }
 
-                    # Convert to JSON string and send
-                    import json
                     await websocket.send_text(json.dumps(response_data))
                     print(
                         f"🔊 Audio sent back to Raspberry Pi ({len(audio_bytes)} bytes)")
 
             except Exception as e:
                 print(f"❌ Error generating audio: {e}")
-                # Send a simple beep command as fallback
                 fallback_data = {
                     "type": "beep_notification",
-                    # frequency, duration pairs
                     "pattern": [440, 200, 554, 200]
                 }
-                import json
                 await websocket.send_text(json.dumps(fallback_data))
                 print("🔊 Sent beep notification as fallback")
 
