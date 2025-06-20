@@ -73,7 +73,7 @@ async def websocket_endpoint(
                 continue
 
             notification_service.send_message(
-                f"{face.firstname} {face.name} is at the door MOVE",
+                f"{face.firstname} {face.name} est à la porte",
                 frame
             )
             name, firstname = ("", "") if face.name == "unknow" else (
@@ -82,8 +82,8 @@ async def websocket_endpoint(
             print(f"🎤 Message to be sent: {message}")
 
             try:
-                # audio_stream = speech_service.text_to_speech(message)
-                audio_stream = None
+                audio_stream = speech_service.text_to_speech(message)
+                # audio_stream = None
                 print(f"🎤 Audio stream generated")
 
                 if audio_stream:
