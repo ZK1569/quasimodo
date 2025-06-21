@@ -6,6 +6,8 @@ La solution proposée repose sur une architecture distribuée composée de deux 
 
 L’approche retenue vise à combiner différents domaines techniques tels que la vision par ordinateur, l’audio embarqué, les protocoles WebSocket, ainsi que les API d’intelligence artificielle (OpenAI et ElevenLabs). L’ensemble constitue une plateforme interactive et évolutive permettant d’expérimenter les principes fondamentaux de l’IoT appliqués à un cas concret de sécurité et de domotique.
 
+---
+
 ## Installation
 Le système se compose de deux parties distinctes hébergées dans des dépôts Git séparés :
 - Le serveur backend, nommé quasimodo : github.com/ZK1569/quasimodo
@@ -57,6 +59,8 @@ Le câblage des capteurs (caméra, capteur IR, haut-parleur, bouton tactile) ser
 
 (voie schéma de cablage)
 
+---
+
 ## Matériel Utilisé
 Dans le cadre de ce projet, un ensemble de composants matériels était mis à disposition selon les spécifications du cours 8INF924. Parmi ces éléments, nous avons sélectionné et utilisé ceux qui répondaient le mieux aux contraintes techniques de la sonnette intelligente. Le développement s’est appuyé sur les composants suivants :
 - Raspberry Pi 4B : cœur du système embarqué, chargé de piloter les capteurs, de gérer les flux audio/vidéo et de communiquer avec le backend.
@@ -80,6 +84,8 @@ Concernant la sortie audio, le speaker FIT0449 a d’abord été considéré com
 - Capteur PIR SEN0018
 - Capteur tactile DFR0030
 - Écouteurs jack (remplaçant temporaire du speaker)
+
+---
 
 ## Architecture Logicielle / Fonctionnalités
 Le système repose sur une architecture répartie articulée autour de deux grands modules : un module embarqué (Raspberry Pi) pour la capture et la détection locale, et un serveur backend pour le traitement, l’interprétation et la réponse aux événements. Les deux modules communiquent via le protocole WebSocket, ce qui permet une transmission bidirectionnelle en temps réel.
@@ -107,8 +113,19 @@ Cette seconde WebSocket centralise les interactions vocales et les signaux prove
 2. Synthèse vocale : si l'utilisateur n’est pas disponible, le serveur utilise l’API ElevenLabs pour générer un message audio informant le visiteur.
 3. Lecture du message : le Raspberry récupère ce fichier audio et le joue (via écouteurs).
 4. Capture vocale du visiteur : le visiteur peut alors laisser un message via le micro de la caméra.
-5. Transcription : le fichier audio est envoyé à l’API OpenAI Whisper pour être transcrit en texte.
+5. Transcription : le fichier audio est retranscrit en texte grâce au modèle Whisper d'OpenAI, depuis la librairie faster-whisper, pour une exécution plus rapide
 6. Notification distante : la transcription du message est envoyée à l’utilisateur (via Discord, par exemple).
+
+### Mode de fonctionnement de `clochette`
+Le projet clochette a été conçu pour fonctionner selon deux modes :
+- Mode embarqué (Raspberry Pi) : utilisé en conditions réelles, ce mode exploite les capteurs physiques connectés à la carte (caméra, capteur PIR, capteur tactile, etc.). C’est le mode prévu pour l’usage final du système.
+- Mode simulation (ordinateur de développement) : utilisé durant la phase de développement, ce mode permet de tester le backend sans matériel physique. Il suffit de lancer la commande suivante pour simuler le flux d’une sonnette :
+```bash
+python main.py -n ./asset/test_video.mp4
+```
+Dans ce cas, une vidéo est lue localement et les images sont envoyées au backend comme si elles provenaient d’un flux caméra réel. Cela a permis aux membres de l’équipe n’ayant pas accès à une Raspberry Pi de contribuer activement au développement et aux tests du système.
+
+---
 
 ## Pistes d’Amélioration
 Bien que le prototype actuel remplisse les principales fonctionnalités attendues, il reste plusieurs limitations techniques et possibilités d’amélioration à envisager pour une version plus aboutie ou déployable à l’échelle.
